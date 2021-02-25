@@ -7,27 +7,20 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
+
+var {helloSchema,helloRoot} = require('./graphql/hello_world')
+var {courseSchema,courseRoute} = require('./graphql/course')
 
 var app = express();
 
-// Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
- 
-// The root provides a resolver function for each API endpoint
-var root = {
-  hello: () => {
-    return 'Hello world!';
-  },
-};
- 
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
+app.use('/course-graphql', graphqlHTTP({
+  schema: courseSchema,
+  rootValue: courseRoute,
+  graphiql: true,
+}));
+app.use('/hello-graphql', graphqlHTTP({
+  schema: helloSchema,
+  rootValue: helloRoot,
   graphiql: true,
 }));
 
