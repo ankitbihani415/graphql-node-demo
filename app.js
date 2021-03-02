@@ -6,12 +6,14 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var pdfRouter = require('./routes/pdfgen');
 var { graphqlHTTP } = require('express-graphql');
 
 var {helloSchema,helloRoot} = require('./graphql/hello_world')
 var {courseSchema,courseRoute} = require('./graphql/course')
 
 var app = express();
+
 
 app.use('/course-graphql', graphqlHTTP({
   schema: courseSchema,
@@ -36,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/pdf', pdfRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
