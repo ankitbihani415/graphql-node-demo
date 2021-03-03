@@ -5,6 +5,7 @@ var cntrl = require('./../controller/pdfGeneration')
 /* GET users listing. */
 router.get('/pdf-create', cntrl.pdfCreate);
 router.get('/pdf-stream', cntrl.pdfStream);
+router.get('/pdf-handlebar', cntrl.handleBar);
 
 
 module.exports = router;
