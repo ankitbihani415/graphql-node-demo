@@ -9,18 +9,17 @@ module.exports = {
         pdf.create(html, options).toFile('./businesscard.pdf', function(err, res) {
         if (err) return console.log(err);
             console.log(res); // { filename: '/app/businesscard.pdf' }
-            
+            res.status(200).send('check file')
         })
-        res.status(200).send('check file')
     },
     pdfStream : (req,res) => {
         pdf.create(html).toStream(function(err, stream){
             stream.pipe(fs.createWriteStream('./foo.pdf'));
+            res.status(200).send('check file')
         });
-        res.status(200).send('check file')
     },
     handleBar : (req,res) => {
-        var source = fs.readFileSync('./views/handlebartest.html', 'utf8');
+        var source = fs.readFileSync('./views/handlebartest.handlebars', 'utf8');
         const template = Handlebars.compile(source);
         data = {
             'name' : 'ankit',
@@ -29,7 +28,7 @@ module.exports = {
         }
         pdf.create(template(data)).toStream(function(err, stream){
             stream.pipe(fs.createWriteStream('./hanlebarfoo.pdf'));
+            res.status(200).send('check file')
         });
-        res.status(200).send('check file')
     }
 }
