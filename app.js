@@ -13,7 +13,7 @@ var {helloSchema,helloRoot} = require('./graphql/hello_world')
 var {courseSchema,courseRoute} = require('./graphql/course')
 
 var app = express();
-
+global.appRoot = path.resolve(__dirname);
 
 app.use('/course-graphql', graphqlHTTP({
   schema: courseSchema,
