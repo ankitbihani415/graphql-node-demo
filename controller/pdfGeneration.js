@@ -42,7 +42,9 @@ module.exports = {
             created_at:'today',
             owner_name : 'ankit',
             image1 : 'https://lh3.googleusercontent.com/-NwvTxqbH1mk/YD3XcsYQXmI/AAAAAAAACXU/kD91V1AnNYUiVm5uFBVkagz2KPqqocbBACK8BGAsYHg/s0/2021-03-01.png',
-            image2 : 'https://d3gwru59h34lrx.cloudfront.net/creatives/4655/3510/tmp_2Ff0484d31_2F_241612942347429.jpeg'
+            image2 : 'https://d3gwru59h34lrx.cloudfront.net/creatives/4655/3510/tmp_2Ff0484d31_2F_241612942347429.jpeg',
+            image3 : 'google.png',
+            image4 : 'tmp_s3.jpeg'
         }
         image = data.image2.split('/')
         img2 = image[image["length"]-1]
@@ -57,12 +59,12 @@ module.exports = {
         pdf.create(template(data),{
             format:'Legal',
             orientation:'landscape',
-            base:appRoot
+            base:`file:///${appRoot}/temp_pdf/`
         }).toStream(function(err, stream){
             stream.pipe(fs.createWriteStream('./hanlebarfoo.pdf'));
             console.log(data)
-            fs.unlinkSync(`${appRoot}/temp_pdf/${data.image2}`);
-            fs.unlinkSync(`${appRoot}/temp_pdf/${data.image1}`);
+            // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image2}`);
+            // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image1}`);
             res.status(200).send('check file')
         });
     }
