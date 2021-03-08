@@ -3,6 +3,8 @@ const pdf = require('html-pdf');
 const Handlebars = require("handlebars");
 const request = require('request');
 
+const getBufferData = require('./helpers')
+
 var html = fs.readFileSync('./views/test.html', 'utf8');
 var options = { format: 'Letter' };
 
@@ -68,36 +70,33 @@ module.exports = {
             res.status(200).send('check file')
         });
     },
-    handleBarBuffer : (req, res) => {
-        var requestBuffer = require('request').defaults({ encoding: null });
-
-        requestBuffer.get('https://d3gwru59h34lrx.cloudfront.net/creatives/4655/3510/tmp_2Ff0484d31_2F_241612942347429.jpeg', function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                image = "data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64');
-                // console.log(data);
-                data = {
-                    created_at:'today',
-                    owner_name : 'ankit',
-                    image1 : image,
-                    image2 : image,
-                    image3 : image,
-                    image4 : image
-                }
-                var source = fs.readFileSync('./views/handlebartest.handlebars', 'utf8');
-                // var source = fs.readFileSync('./views/print.handlebars', 'utf8');
-                const template = Handlebars.compile(source);
-                pdf.create(template(data),{
-                    format:'Legal',
-                    orientation:'landscape',
-                    base:`file:///${appRoot}/temp_pdf/`
-                }).toStream(function(err, stream){
-                    stream.pipe(fs.createWriteStream('./hanlebarfoobuffer.pdf'));
-                    // console.log(data)
-                    // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image2}`);
-                    // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image1}`);
-                    res.status(200).send('check file')
-                });
-            }
+    
+    handleBarBuffer : async(req, res) => {
+        var imageUrl = 'https://d3gwru59h34lrx.cloudfront.net/creatives/4655/3510/tmp_2Ff0484d31_2F_241612942347429.jpeg'
+        
+        var imageBuffer = await getBufferData(imageUrl) 
+        debugger
+        data = {
+            created_at:'today',
+            owner_name : 'ankit',
+            image1 : imageBuffer,
+            image2 : imageBuffer,
+            image3 : imageBuffer,
+            image4 : imageBuffer
+        }
+        var source = fs.readFileSync('./views/handlebartest.handlebars', 'utf8');
+        // var source = fs.readFileSync('./views/print.handlebars', 'utf8');
+        const template = Handlebars.compile(source);
+        pdf.create(template(data),{
+            format:'Legal',
+            orientation:'landscape',
+            base:`file:///${appRoot}/temp_pdf/`
+        }).toStream(function(err, stream){
+            stream.pipe(fs.createWriteStream('./hanlebarfoobuffer.pdf'));
+            // console.log(data)
+            // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image2}`);
+            // fs.unlinkSync(`${appRoot}/temp_pdf/${data.image1}`);
+            res.status(200).send('check file')
         });
     }
 }
