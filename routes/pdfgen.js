@@ -6,6 +6,7 @@ var cntrl = require('./../controller/pdfGeneration')
 router.get('/pdf-create', cntrl.pdfCreate);
 router.get('/pdf-stream', cntrl.pdfStream);
 router.get('/pdf-handlebar', cntrl.handleBar);
+router.get('/pdf-buffer',cntrl.handleBarBuffer);
 
 
 module.exports = router;
