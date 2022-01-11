@@ -6,22 +6,25 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var pdfRouter = require('./routes/pdfgen');
+var mailRouter = require('./routes/mailer')
 var { graphqlHTTP } = require('express-graphql');
 
 var {helloSchema,helloRoot} = require('./graphql/hello_world')
 var {courseSchema,courseRoute} = require('./graphql/course')
 
 var app = express();
+global.appRoot = path.resolve(__dirname);
 
 app.use('/course-graphql', graphqlHTTP({
-  schema: courseSchema,
-  rootValue: courseRoute,
-  graphiql: true,
+	schema: courseSchema,
+	rootValue: courseRoute,
+	graphiql: true,
 }));
 app.use('/hello-graphql', graphqlHTTP({
-  schema: helloSchema,
-  rootValue: helloRoot,
-  graphiql: true,
+	schema: helloSchema,
+	rootValue: helloRoot,
+	graphiql: true,
 }));
 
 // view engine setup
@@ -36,6 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/pdf', pdfRouter);
+app.use('/mail',mailRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
